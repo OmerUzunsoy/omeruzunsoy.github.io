@@ -5,7 +5,7 @@ import { useLanguage } from '../context/LanguageContext';
 const Preloader = () => {
     const { t } = useLanguage();
 
-    if (!t || !t.loading) return null;
+    const loadingText = t?.loading || 'Yükleniyor...';
 
     const pathVariants = {
         hidden: {
@@ -72,7 +72,7 @@ const Preloader = () => {
                         transition={{ duration: 1.5, repeat: Infinity }}
                         className="text-white font-outfit font-bold text-xl tracking-[0.5em]"
                     >
-                        {t.loading}
+                        {loadingText}
                     </motion.div>
                     <motion.div
                         animate={{
@@ -82,7 +82,7 @@ const Preloader = () => {
                         transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 3 }}
                         className="absolute top-0 left-0 text-blue-500 font-outfit font-bold text-xl tracking-[0.5em] mix-blend-screen"
                     >
-                        {t.loading}
+                        {loadingText}
                     </motion.div>
                     <motion.div
                         animate={{
@@ -92,7 +92,7 @@ const Preloader = () => {
                         transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 2 }}
                         className="absolute top-0 left-0 text-purple-500 font-outfit font-bold text-xl tracking-[0.5em] mix-blend-screen"
                     >
-                        {t.loading}
+                        {loadingText}
                     </motion.div>
                 </div>
             </div>
