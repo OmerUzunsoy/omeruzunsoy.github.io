@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Github, Download, X, Construction, FlaskConical } from 'lucide-react';
+import { Search, Github, Download, X, Construction, FlaskConical, Sparkles } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { getStoredProjects } from '../utils/projectData';
 import ImageWithSkeleton from '../components/ImageWithSkeleton';
@@ -118,6 +118,7 @@ const ProjectsPage = () => {
                     {filteredProjects.map((project) => {
                         const isInDevelopment = project.status === 'Geliştirme';
                         const isBeta = project.status === 'Beta';
+                        const isNew = project.isNew === true;
                         
                         return (
                         <motion.div
@@ -125,7 +126,7 @@ const ProjectsPage = () => {
                             initial={false}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.12, ease: 'easeOut' }}
-                            className={`bg-white dark:bg-slate-950 rounded-2xl overflow-hidden shadow-lg border border-slate-200 dark:border-slate-800 group hover:shadow-2xl transition-all duration-300 relative ${isInDevelopment ? 'ring-2 ring-amber-500/50' : ''}`}
+                            className={`bg-white dark:bg-slate-950 rounded-2xl overflow-hidden shadow-lg border border-slate-200 dark:border-slate-800 group hover:shadow-2xl transition-all duration-300 relative ${isInDevelopment ? 'ring-2 ring-amber-500/50' : ''} ${isNew ? 'ring-2 ring-green-500/50' : ''}`}
                         >
                             {/* Development Banner */}
                             {isInDevelopment && (
@@ -141,6 +142,14 @@ const ProjectsPage = () => {
                                 <div className="absolute top-3 right-3 z-30 bg-purple-600 text-white text-xs font-bold py-1.5 px-3 rounded-full flex items-center gap-1.5 shadow-lg shadow-purple-600/30">
                                     <FlaskConical size={12} />
                                     <span>BETA</span>
+                                </div>
+                            )}
+
+                            {/* NEW Badge */}
+                            {isNew && !isInDevelopment && !isBeta && (
+                                <div className="absolute top-3 right-3 z-30 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-bold py-1.5 px-3 rounded-full flex items-center gap-1.5 shadow-lg shadow-green-500/30 animate-pulse">
+                                    <Sparkles size={12} className="animate-spin" style={{ animationDuration: '3s' }} />
+                                    <span>{isTurkish ? 'YENİ' : 'NEW'}</span>
                                 </div>
                             )}
 

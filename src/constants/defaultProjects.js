@@ -1,5 +1,21 @@
 const defaultProjects = [
     {
+        id: 0,
+        title: 'UzunsIPTV',
+        titleEn: 'UzunsIPTV',
+        description: 'Android için modern IPTV oynatıcı uygulaması. Xtream Codes API ve M3U playlist desteği, ExoPlayer tabanlı güçlü video oynatıcı, canlı TV, film ve dizi izleme.',
+        descriptionEn: 'Modern IPTV player app for Android. Xtream Codes API and M3U playlist support, ExoPlayer-based powerful video player, live TV, movies and series streaming.',
+        category: 'mobile',
+        status: 'Yayında',
+        featured: true,
+        isNew: true,
+        tags: ['Kotlin', 'Android', 'ExoPlayer', 'Retrofit', 'Room Database', 'MVVM', 'Android TV'],
+        image: '/images/projects/uzuns-iptv.jpg',
+        github: 'https://github.com/OmerUzunsoy/UzunsIPTV',
+        download: 'https://github.com/OmerUzunsoy/UzunsIPTV/archive/refs/heads/main.zip',
+        lastUpdate: '2024-12-03'
+    },
+    {
         id: 1,
         title: 'E-Ticaret Backend API',
         titleEn: 'E-Commerce Backend API',
@@ -82,7 +98,7 @@ const defaultProjects = [
         descriptionEn: 'Modern and powerful mouse auto-clicker application. 1-10,000 CPS, Dark/Light theme, TR/EN language support, advanced hotkey system.',
         category: 'desktop',
         status: 'Yayında',
-        featured: true,
+        featured: false,
         tags: ['C#', 'WPF', '.NET Framework', 'Windows API', 'MVVM', 'Desktop App'],
         image: '/images/projects/uzuns-clicker.jpg',
         github: 'https://github.com/OmerUzunsoy/UzunsClicker-V2',
