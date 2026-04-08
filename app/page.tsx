@@ -400,15 +400,12 @@ export default function Home() {
                             <div className="flex flex-wrap gap-3">
                               <a
                                 href={project.downloadUrl}
+                                download
+                                target="_blank"
+                                rel="noreferrer"
                                 className="rounded-full bg-[linear-gradient(90deg,#ed1c24,#ff4d6d)] px-5 py-3 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5"
                               >
                                 {project.downloadLabel}
-                              </a>
-                              <a
-                                href={project.githubUrl}
-                                className="rounded-full border border-white/12 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-white/88 backdrop-blur-md transition-colors duration-300 hover:border-[#4f7cff]/40 hover:text-white"
-                              >
-                                GitHub&apos;da Aç
                               </a>
                             </div>
                           </div>

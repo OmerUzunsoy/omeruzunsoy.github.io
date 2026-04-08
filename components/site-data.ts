@@ -408,8 +408,8 @@ export function getFallbackProjects() {
       status: meta.status,
       featured: meta.featured,
       order: meta.order,
-      downloadUrl: `https://github.com/${GITHUB_USERNAME}/${meta.repoName}`,
-      downloadLabel: "GitHub'a Git",
+      downloadUrl: `https://github.com/${GITHUB_USERNAME}/${meta.repoName}/archive/refs/heads/main.zip`,
+      downloadLabel: "ZIP İndir",
       githubUrl: `https://github.com/${GITHUB_USERNAME}/${meta.repoName}`,
     }));
 }
