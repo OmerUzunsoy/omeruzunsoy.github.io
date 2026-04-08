@@ -330,13 +330,44 @@ export default function FloatingLines({
     if (!container) return;
 
     let active = true;
+    const isTouchDevice =
+      window.matchMedia("(pointer: coarse)").matches ||
+      window.matchMedia("(hover: none)").matches;
+    const isSmallViewport = window.innerWidth < 768;
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const useReducedMode = isTouchDevice || isSmallViewport || prefersReducedMotion;
+    const effectiveInteractive = interactive && !useReducedMode;
+    const effectiveParallax = parallax && !useReducedMode;
+    const effectiveMouseDamping = useReducedMode
+      ? Math.max(mouseDamping, 0.09)
+      : mouseDamping;
+    const effectiveAnimationSpeed = useReducedMode
+      ? animationSpeed * 0.8
+      : animationSpeed;
+    const effectiveTopLineCount = useReducedMode
+      ? Math.max(2, Math.ceil(topLineCount * 0.6))
+      : topLineCount;
+    const effectiveMiddleLineCount = useReducedMode
+      ? Math.max(3, Math.ceil(middleLineCount * 0.6))
+      : middleLineCount;
+    const effectiveBottomLineCount = useReducedMode
+      ? Math.max(2, Math.ceil(bottomLineCount * 0.6))
+      : bottomLineCount;
 
     const scene = new Scene();
     const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
     camera.position.z = 1;
 
-    const renderer = new WebGLRenderer({ antialias: false, alpha: false, powerPreference: "high-performance" });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.35));
+    const renderer = new WebGLRenderer({
+      antialias: false,
+      alpha: false,
+      powerPreference: useReducedMode ? "low-power" : "high-performance",
+    });
+    renderer.setPixelRatio(
+      Math.min(window.devicePixelRatio || 1, useReducedMode ? 0.9 : 1.35),
+    );
     renderer.domElement.style.width = "100%";
     renderer.domElement.style.height = "100%";
     container.appendChild(renderer.domElement);
@@ -344,13 +375,13 @@ export default function FloatingLines({
     const uniforms = {
       iTime: { value: 0 },
       iResolution: { value: new Vector3(1, 1, 1) },
-      animationSpeed: { value: animationSpeed },
+      animationSpeed: { value: effectiveAnimationSpeed },
       enableTop: { value: enabledWaves.includes("top") },
       enableMiddle: { value: enabledWaves.includes("middle") },
       enableBottom: { value: enabledWaves.includes("bottom") },
-      topLineCount: { value: topLineCount },
-      middleLineCount: { value: middleLineCount },
-      bottomLineCount: { value: bottomLineCount },
+      topLineCount: { value: effectiveTopLineCount },
+      middleLineCount: { value: effectiveMiddleLineCount },
+      bottomLineCount: { value: effectiveBottomLineCount },
       topLineDistance: { value: topLineDistance },
       middleLineDistance: { value: middleLineDistance },
       bottomLineDistance: { value: bottomLineDistance },
@@ -376,11 +407,11 @@ export default function FloatingLines({
         ),
       },
       iMouse: { value: new Vector2(-1000, -1000) },
-      interactive: { value: interactive },
+      interactive: { value: effectiveInteractive },
       bendRadius: { value: bendRadius },
       bendStrength: { value: bendStrength },
       bendInfluence: { value: 0 },
-      parallax: { value: parallax },
+      parallax: { value: effectiveParallax },
       parallaxStrength: { value: parallaxStrength },
       parallaxOffset: { value: new Vector2(0, 0) },
       lineGradient: {
@@ -477,7 +508,7 @@ export default function FloatingLines({
       targetMouseRef.current.set(x * dpr, (rect.height - y) * dpr);
       targetInfluenceRef.current = 1;
 
-      if (parallax) {
+      if (effectiveParallax) {
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
         const offsetX = (x - centerX) / rect.width;
@@ -494,7 +525,7 @@ export default function FloatingLines({
       targetParallaxRef.current.set(0, 0);
     };
 
-    if (interactive) {
+    if (effectiveInteractive) {
       window.addEventListener("mousemove", handleMouseMove, {
         passive: true,
       });
@@ -515,18 +546,21 @@ export default function FloatingLines({
 
       uniforms.iTime.value = clock.getElapsedTime();
 
-      if (interactive) {
-        currentMouseRef.current.lerp(targetMouseRef.current, mouseDamping);
+      if (effectiveInteractive) {
+        currentMouseRef.current.lerp(targetMouseRef.current, effectiveMouseDamping);
         uniforms.iMouse.value.copy(currentMouseRef.current);
 
         currentInfluenceRef.current +=
           (targetInfluenceRef.current - currentInfluenceRef.current) *
-          mouseDamping;
+          effectiveMouseDamping;
         uniforms.bendInfluence.value = currentInfluenceRef.current;
       }
 
-      if (parallax) {
-        currentParallaxRef.current.lerp(targetParallaxRef.current, mouseDamping);
+      if (effectiveParallax) {
+        currentParallaxRef.current.lerp(
+          targetParallaxRef.current,
+          effectiveMouseDamping,
+        );
         uniforms.parallaxOffset.value.copy(currentParallaxRef.current);
       }
 
@@ -543,7 +577,7 @@ export default function FloatingLines({
       intersectionObserver?.disconnect();
       document.removeEventListener("visibilitychange", handleVisibility);
 
-      if (interactive) {
+      if (effectiveInteractive) {
         window.removeEventListener("mousemove", handleMouseMove);
         window.removeEventListener("mouseleave", resetInteraction);
       }

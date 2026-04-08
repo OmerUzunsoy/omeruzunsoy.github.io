@@ -40,11 +40,16 @@ export default function ClickSpark({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sparksRef = useRef<Spark[]>([]);
   const isPageVisibleRef = useRef(true);
+  const isTouchDeviceRef = useRef(false);
 
   useEffect(() => {
     const handleVisibility = () => {
       isPageVisibleRef.current = document.visibilityState === "visible";
     };
+
+    isTouchDeviceRef.current =
+      window.matchMedia("(pointer: coarse)").matches ||
+      window.matchMedia("(hover: none)").matches;
 
     handleVisibility();
     document.addEventListener("visibilitychange", handleVisibility);
@@ -149,6 +154,8 @@ export default function ClickSpark({
   }, [duration, easeFunc, extraScale, sparkColor, sparkRadius, sparkSize]);
 
   const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    if (isTouchDeviceRef.current) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 

@@ -2,7 +2,7 @@
 
 /* eslint-disable react/no-unknown-property */
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { forwardRef, useLayoutEffect, useMemo, useRef } from "react";
+import { forwardRef, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Color, Mesh, type ShaderMaterial } from "three";
 
 const hexToNormalizedRGB = (hex: string) => {
@@ -128,22 +128,38 @@ export default function Silk({
   className = "",
 }: SilkProps) {
   const meshRef = useRef<Mesh>(null);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  useEffect(() => {
+    setIsTouchDevice(
+      window.matchMedia("(pointer: coarse)").matches ||
+        window.matchMedia("(hover: none)").matches,
+    );
+  }, []);
 
   const uniforms = useMemo(
     () => ({
-      uSpeed: { value: speed },
+      uSpeed: { value: isTouchDevice ? speed * 0.65 : speed },
       uScale: { value: scale },
-      uNoiseIntensity: { value: noiseIntensity },
+      uNoiseIntensity: { value: isTouchDevice ? noiseIntensity * 0.75 : noiseIntensity },
       uColor: { value: new Color(...hexToNormalizedRGB(color)) },
       uRotation: { value: rotation },
       uTime: { value: 0 },
     }),
-    [speed, scale, noiseIntensity, color, rotation],
+    [color, isTouchDevice, noiseIntensity, rotation, scale, speed],
   );
 
   return (
     <div className={`absolute inset-0 ${className}`}>
-      <Canvas dpr={[1, 1.25]} frameloop="always" gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}>
+      <Canvas
+        dpr={isTouchDevice ? [0.7, 1] : [1, 1.25]}
+        frameloop="always"
+        gl={{
+          antialias: false,
+          alpha: true,
+          powerPreference: isTouchDevice ? "low-power" : "high-performance",
+        }}
+      >
         <SilkPlane ref={meshRef} uniforms={uniforms} />
       </Canvas>
     </div>

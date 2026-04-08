@@ -38,8 +38,15 @@ export function Particles({ className = "" }: { className?: string }) {
       const rect = parent.getBoundingClientRect();
       canvas.width = rect.width;
       canvas.height = rect.height;
+      const isTouchDevice =
+        window.matchMedia("(pointer: coarse)").matches ||
+        window.matchMedia("(hover: none)").matches;
+      const densityDivisor = isTouchDevice ? 32000 : 18000;
 
-      const count = Math.max(30, Math.floor((rect.width * rect.height) / 18000));
+      const count = Math.max(
+        isTouchDevice ? 14 : 30,
+        Math.floor((rect.width * rect.height) / densityDivisor),
+      );
       particlesRef.current = Array.from({ length: count }, () => ({
         x: Math.random() * rect.width,
         y: Math.random() * rect.height,
@@ -62,11 +69,23 @@ export function Particles({ className = "" }: { className?: string }) {
     intersectionObserver.observe(parent);
 
     let frame = 0;
+    let lastFrame = 0;
     const render = () => {
       if (!isPageVisibleRef.current || !isVisibleRef.current) {
         frame = requestAnimationFrame(render);
         return;
       }
+
+      const now = performance.now();
+      const isTouchDevice =
+        window.matchMedia("(pointer: coarse)").matches ||
+        window.matchMedia("(hover: none)").matches;
+      const frameInterval = isTouchDevice ? 1000 / 24 : 1000 / 40;
+      if (now - lastFrame < frameInterval) {
+        frame = requestAnimationFrame(render);
+        return;
+      }
+      lastFrame = now;
 
       context.clearRect(0, 0, canvas.width, canvas.height);
 

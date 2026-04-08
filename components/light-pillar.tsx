@@ -71,12 +71,17 @@ export default function LightPillar({
       /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent,
       );
+    const isTouchDevice =
+      window.matchMedia("(pointer: coarse)").matches ||
+      window.matchMedia("(hover: none)").matches;
     const isLowEndDevice =
-      isMobile || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
+      isMobile ||
+      isTouchDevice ||
+      (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
 
     let effectiveQuality = quality;
     if (isLowEndDevice && quality === "high") effectiveQuality = "medium";
-    if (isMobile && quality !== "low") effectiveQuality = "low";
+    if ((isMobile || isTouchDevice) && quality !== "low") effectiveQuality = "low";
 
     const qualitySettings = {
       low: {
