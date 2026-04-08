@@ -50,7 +50,7 @@ export function AboutSection() {
           <p className="text-xs uppercase tracking-[0.42em] text-white/38">
             Hakkımda
           </p>
-          <h2 className="mt-4 font-display text-[clamp(2.9rem,6vw,5.6rem)] uppercase leading-[0.92] text-white">
+          <h2 className="mt-4 pt-[0.14em] font-display text-[clamp(2.9rem,6vw,5.6rem)] uppercase leading-[1.08] tracking-[-0.03em] text-white">
             Kod yazmayı
             <br />
             ürün kurmaya çeviriyorum.

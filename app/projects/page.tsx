@@ -98,7 +98,7 @@ export default function ProjectsPage() {
               <p className="text-xs uppercase tracking-[0.4em] text-white/38">
                 Proje Arşivi
               </p>
-              <h1 className="mt-4 font-display text-[clamp(3.4rem,8vw,7rem)] uppercase leading-[0.9] text-white">
+              <h1 className="mt-4 pt-[0.14em] font-display text-[clamp(3.4rem,8vw,7rem)] uppercase leading-[1.04] tracking-[-0.03em] text-white">
                 Tüm projeleri
                 <br />
                 tek yüzeyde tara.
@@ -253,7 +253,7 @@ export default function ProjectsPage() {
                             {project.platform}
                           </span>
                         </div>
-                        <h2 className="mt-4 font-display text-4xl uppercase leading-none text-white sm:text-5xl">
+                        <h2 className="mt-4 font-display text-4xl uppercase leading-[0.94] tracking-[-0.03em] text-white sm:text-5xl">
                           {project.title}
                         </h2>
                         <p className="mt-5 max-w-2xl text-sm leading-7 text-white/62 sm:text-base">

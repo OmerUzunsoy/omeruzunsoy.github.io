@@ -129,7 +129,7 @@ export default function Home() {
             <div className="pointer-events-none absolute inset-0 bg-grain opacity-60" />
 
             <div className="pointer-events-none relative z-10 mx-auto flex w-full max-w-5xl translate-y-4 flex-col items-center text-center sm:translate-y-6">
-              <h1 className="overflow-visible pt-8 font-display text-[clamp(4.2rem,12.5vw,9.8rem)] uppercase leading-[0.82] tracking-[-0.07em] sm:pt-10">
+              <h1 className="overflow-visible pt-8 font-display text-[clamp(4.2rem,12.5vw,9.8rem)] uppercase leading-[0.88] tracking-[-0.06em] sm:pt-10">
                 <span className="block overflow-visible">
                   <ShinyText
                     text="ÖMER"
@@ -235,7 +235,7 @@ export default function Home() {
                 <p className="text-xs uppercase tracking-[0.42em] text-white/38">
                   Yetenekler
                 </p>
-                <h2 className="mt-4 font-display text-[clamp(2.8rem,6vw,5.25rem)] uppercase leading-[0.92] text-white">
+                <h2 className="mt-4 font-display text-[clamp(2.8rem,6vw,5.25rem)] uppercase leading-[1.08] tracking-[-0.03em] text-white">
                   Ürettiğim sistemlerin ana katmanları.
                 </h2>
                 <p className="mt-5 text-base leading-7 text-white/58 sm:text-lg">
@@ -309,7 +309,7 @@ export default function Home() {
                 <p className="text-xs uppercase tracking-[0.42em] text-white/38">
                   Projeler
                 </p>
-                <h2 className="mt-4 font-display text-[clamp(2.8rem,6vw,5.25rem)] uppercase leading-[0.92] text-white">
+                <h2 className="mt-4 font-display text-[clamp(2.8rem,6vw,5.25rem)] uppercase leading-[1.1] tracking-[-0.03em] text-white">
                   Seçili işler kısa vitrinde.
                 </h2>
                 <p className="mt-5 text-base leading-7 text-white/58 sm:text-lg">
@@ -366,7 +366,7 @@ export default function Home() {
                             <p className="text-xs uppercase tracking-[0.36em] text-[#ff8ea2]">
                               {project.kind}
                             </p>
-                            <h3 className="mt-3 font-display text-4xl uppercase leading-none text-white sm:text-5xl">
+                            <h3 className="mt-3 font-display text-4xl uppercase leading-[0.94] tracking-[-0.03em] text-white sm:text-5xl">
                               {project.title}
                             </h3>
                             <p className="mt-5 max-w-2xl text-sm leading-7 text-white/62 sm:text-base">

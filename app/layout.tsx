@@ -5,12 +5,12 @@ import "./globals.css";
 import { SmoothScrollProvider } from "@/components/smooth-scroll-provider";
 
 const manrope = Manrope({
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   variable: "--font-manrope",
 });
 
 const oswald = Oswald({
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   variable: "--font-oswald",
 });
 
