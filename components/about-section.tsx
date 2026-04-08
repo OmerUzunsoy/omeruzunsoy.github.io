@@ -51,10 +51,9 @@ export function AboutSection() {
             Hakkımda
           </p>
           <h2 className="mt-4 pt-[0.14em] font-display text-[clamp(2.9rem,6vw,5.6rem)] uppercase leading-[1.08] tracking-[-0.03em] text-white">
-            Fikirleri dijital
-            <br />
-            gerçekliğe dönüştüren kodcu
-          </h2>
+  Kodu ürüne, <br />
+  fikri deneyime dönüştürüyorum.
+</h2>
 
           <div className="mt-6 space-y-5 text-base leading-8 text-white/64 sm:text-lg">
             {aboutParagraphs.map((paragraph) => (
