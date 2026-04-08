@@ -31,6 +31,8 @@ export type ProjectMeta = {
   status: ProjectStatus;
   featured?: boolean;
   order: number;
+  fallbackDownloadUrl?: string;
+  fallbackDownloadLabel?: string;
 };
 
 export type GitHubRepo = {
@@ -154,6 +156,9 @@ export const projectMetaMap: Record<string, ProjectMeta> = {
     status: "Yayınlandı",
     featured: true,
     order: 1,
+    fallbackDownloadUrl:
+      "https://github.com/OmerUzunsoy/UzunsIPTV/releases/download/v1.0.0/UzunsIPTV-v1.0.0.apk",
+    fallbackDownloadLabel: "APK İndir",
   },
   "ProductCatalog-API": {
     slug: "productcatalog-api",
@@ -467,8 +472,10 @@ export function getFallbackProjects() {
       status: meta.status,
       featured: meta.featured,
       order: meta.order,
-      downloadUrl: `https://github.com/${GITHUB_USERNAME}/${meta.repoName}/archive/refs/heads/main.zip`,
-      downloadLabel: "ZIP İndir",
+      downloadUrl:
+        meta.fallbackDownloadUrl ??
+        `https://github.com/${GITHUB_USERNAME}/${meta.repoName}/archive/refs/heads/main.zip`,
+      downloadLabel: meta.fallbackDownloadLabel ?? "ZIP İndir",
       githubUrl: `https://github.com/${GITHUB_USERNAME}/${meta.repoName}`,
     }));
 }
