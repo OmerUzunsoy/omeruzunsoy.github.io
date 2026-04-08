@@ -283,6 +283,14 @@ export default function ProjectsPage() {
                           >
                             {project.downloadLabel}
                           </a>
+                          <a
+                            href={project.githubUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="rounded-full border border-white/12 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-white/88 backdrop-blur-md transition-colors duration-300 hover:border-[#4f7cff]/40 hover:text-white"
+                          >
+                            GitHub&apos;a Git
+                          </a>
                         </div>
                       </div>
                     </div>

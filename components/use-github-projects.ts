@@ -44,8 +44,8 @@ async function fetchLatestRelease(repoName: string) {
   if (!response.ok) return null;
 
   const release = await response.json();
-  const asset = release.assets?.[0] as GitHubReleaseAsset | undefined;
-  return asset ?? null;
+  const assets = (release.assets ?? []) as GitHubReleaseAsset[];
+  return assets;
 }
 
 export function useGitHubProjects() {
@@ -59,7 +59,7 @@ export function useGitHubProjects() {
       try {
         const repos = await fetchRepos();
         const releaseEntries = await Promise.all(
-          repos.map(async (repo) => [repo.name, await fetchLatestRelease(repo.name)] as const),
+          repos.map(async (repo) => [repo.name, (await fetchLatestRelease(repo.name)) ?? []] as const),
         );
 
         if (!mounted) return;

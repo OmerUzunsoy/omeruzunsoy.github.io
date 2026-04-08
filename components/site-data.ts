@@ -52,6 +52,11 @@ export type GitHubReleaseAsset = {
   updated_at?: string;
 };
 
+type ReleaseAssetPreference = {
+  extensions: string[];
+  label: string;
+};
+
 export const GITHUB_USERNAME = "OmerUzunsoy";
 
 export const featuredProjectSlugs = [
@@ -393,6 +398,60 @@ function inferDownloadLabel(assetName?: string | null) {
   return "ZIP İndir";
 }
 
+function getAssetPreferences(platform: ProjectPlatform): ReleaseAssetPreference[] {
+  if (platform === "Mobil") {
+    return [
+      { extensions: [".apk", ".aab"], label: "APK İndir" },
+      { extensions: [".zip"], label: "ZIP İndir" },
+    ];
+  }
+
+  if (platform === "Masaüstü") {
+    return [
+      { extensions: [".exe"], label: "EXE İndir" },
+      { extensions: [".msi"], label: "MSI İndir" },
+      { extensions: [".zip"], label: "ZIP İndir" },
+    ];
+  }
+
+  return [
+    { extensions: [".zip"], label: "ZIP İndir" },
+    { extensions: [".apk"], label: "APK İndir" },
+    { extensions: [".exe"], label: "EXE İndir" },
+    { extensions: [".msi"], label: "MSI İndir" },
+  ];
+}
+
+function pickBestReleaseAsset(
+  assets: GitHubReleaseAsset[],
+  platform: ProjectPlatform,
+) {
+  const preferences = getAssetPreferences(platform);
+
+  for (const preference of preferences) {
+    const match = assets.find((asset) =>
+      preference.extensions.some((extension) =>
+        asset.name.toLowerCase().endsWith(extension),
+      ),
+    );
+
+    if (match) {
+      return {
+        asset: match,
+        label: preference.label,
+      };
+    }
+  }
+
+  const fallbackAsset = assets[0];
+  if (!fallbackAsset) return null;
+
+  return {
+    asset: fallbackAsset,
+    label: inferDownloadLabel(fallbackAsset.name),
+  };
+}
+
 export function getFallbackProjects() {
   return Object.values(projectMetaMap)
     .sort((a, b) => a.order - b.order)
@@ -416,7 +475,7 @@ export function getFallbackProjects() {
 
 export function mergeGitHubProjects(
   repos: GitHubRepo[],
-  releasesByRepo: Record<string, GitHubReleaseAsset | null>,
+  releasesByRepo: Record<string, GitHubReleaseAsset[]>,
 ) {
   const visibleRepos = repos.filter(
     (repo) =>
@@ -426,9 +485,11 @@ export function mergeGitHubProjects(
   const merged = visibleRepos.map((repo) => {
     const meta = projectMetaMap[repo.name];
     const platform = meta?.platform ?? inferPlatform(repo);
-    const releaseAsset = releasesByRepo[repo.name];
-    const downloadUrl = releaseAsset?.browser_download_url ?? buildZipDownloadUrl(repo);
-    const downloadLabel = inferDownloadLabel(releaseAsset?.name);
+    const releaseAssets = releasesByRepo[repo.name] ?? [];
+    const selectedReleaseAsset = pickBestReleaseAsset(releaseAssets, platform);
+    const downloadUrl =
+      selectedReleaseAsset?.asset.browser_download_url ?? buildZipDownloadUrl(repo);
+    const downloadLabel = selectedReleaseAsset?.label ?? "ZIP İndir";
 
     return {
       slug: meta?.slug ?? slugify(repo.name),
